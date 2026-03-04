@@ -1,24 +1,29 @@
 class Matrix:
-    def __init__(self, value):  
-        self.__value = value
-        self.rows = rows_columns(self.value)[0]
-        self.columns = rows_columns(self.value)[1]
+    def __init__(self, value): 
+        self.value = value
+        self.rows, self.columns = rows_columns(self.value)
+        
     
     def __mul__(self,other):
         if not(isinstance(other, Matrix)):
             raise ValueError('Other value being multipled must be a matrix')
         else: 
-            return multiply(self.value, other.value)
+            return Matrix(multiply(self.value, other.value))
+    
+    def __str__(self):
+        return print_matrix(self.value)
         
 
     @property
     def value(self):
-        return matrix_converter(self.__value)
+        return self.__value
     
 
     @value.setter
     def value(self, new_value):
-        new_value = matrix_converter(new_value)
+        if isinstance(new_value,str):
+            new_value = matrix_converter(new_value)
+
         if not(valid(new_value)):
             raise ValueError("Given nested list is not a matrix")
         else:
@@ -29,16 +34,13 @@ def main():
     # input a matrix
     user_input_1 = input("> ")
     matrix1 = Matrix(user_input_1)
-    
-    user_input_2 = input("> ")
-    matrix2 = Matrix(user_input_2)
-
-    print(matrix1 * matrix2)
+    print(matrix1)
 
 
 # function to convert a matrix as a string into a list 
 def matrix_converter(input: str) -> list:
-
+    # removes the blank spaces around the inputed string 
+    input = input.strip(" ")
     # removes the "[[" and "]]" at the start of the input
     input = input.strip("[")
     input = input.strip("]")
@@ -75,7 +77,6 @@ def valid(input: list) -> bool:
     
     # goes through each row 
     for row in input:
-
         # if the number of elements in that row is not equal to the number of elements 
         # in the first row then return false 
         if len(row) != num_elements:
@@ -146,7 +147,7 @@ def print_matrix(input: list) -> str:
         if i < num_rows:
             output += "\n"
     
-    print(output)
+    return(output)
 
 
 
